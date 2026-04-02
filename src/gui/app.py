@@ -170,8 +170,8 @@ class FraudApp(tk.Tk):
                 f"Dataset 2: {self.file2_name}\n\n"
                 f"Merged Rows: {rows}\n"
                 f"Merged Columns: {cols}\n"
-                f"Fraud Cases (Target=1): {fraud_count}\n"
-                f"Non-Fraud Cases (Target=0): {nonfraud_count}\n"
+                f"Fraudulent Transactions (Target=1): {fraud_count}\n"
+                f"Non-Fraudulent Transactions (Target=0): {nonfraud_count}\n"
                 f"Total Missing Values Before Treatment: {missing_count}"
             )
         else:
@@ -183,15 +183,15 @@ class FraudApp(tk.Tk):
         table_frame = ttk.LabelFrame(frame, text="Preview of Merged Dataset", padding=8)
         table_frame.pack(fill="both", expand=True, padx=10, pady=10)
 
-        columns = list(self.raw_data.columns[:10]) if self.raw_data is not None else []
+        columns = [col for col in self.raw_data.columns if col != "Unnamed: 0"][:10] if self.raw_data is not None else []
         self.overview_tree = ttk.Treeview(table_frame, columns=columns, show="headings", height=18)
 
         for col in columns:
             self.overview_tree.heading(col, text=col)
-            self.overview_tree.column(col, width=110, anchor="center")
+            self.overview_tree.column(col, width=120, anchor="center")
 
         if self.raw_data is not None:
-            preview = self.raw_data[columns].head(15)
+            preview = self.raw_data[columns].head(15).reset_index(drop=True)
             for _, row in preview.iterrows():
                 self.overview_tree.insert("", "end", values=list(row))
 
@@ -229,20 +229,14 @@ class FraudApp(tk.Tk):
         middle_frame = ttk.LabelFrame(frame, text="Saved EDA Figures", padding=10)
         middle_frame.pack(fill="both", expand=True, padx=10, pady=10)
 
-        figure_list = [
-            "missing_values_before_treatment.png",
-            "boxplots_after_outlier_capping.png",
-            "target_class_distribution.png",
-            "numerical_distributions.png",
-            "categorical_distributions.png",
-            "correlation_heatmap.png",
-            "roc_curve_comparison.png",
-            "precision_recall_curve_comparison.png",
-            "top15_feature_importance_tuned_dt.png",
-        ]
+        figure_files = sorted([f.name for f in FIGURES_DIR.glob("*.png")])
 
-        existing = [f for f in figure_list if (FIGURES_DIR / f).exists()]
-        text = "\n".join(existing) if existing else "No saved figures found yet."
+        figure_files = sorted([f.name for f in FIGURES_DIR.glob("*.png")])
+
+        if figure_files:
+            text = f"Total saved figures found: {len(figure_files)}\n\n" + "\n".join(figure_files)
+        else:
+            text = "No saved figures found yet."
 
         self.eda_textbox = tk.Text(middle_frame, wrap="word", height=20)
         self.eda_textbox.insert("1.0", text)
