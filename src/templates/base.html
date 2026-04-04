@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Credit Card Fraud Detection System</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <header class="page-header">
+        <h1>Credit Card Fraud Detection System</h1>
+        <p>Programming for Data Analysis - CMP7005</p>
+    </header>
+
+    <nav class="nav-bar">
+        <a href="{{ url_for('index') }}" class="{% if request.path == '/' %}active{% endif %}">Data Overview</a>
+        <a href="{{ url_for('eda') }}" class="{% if request.path == '/eda' %}active{% endif %}">EDA</a>
+        <a href="{{ url_for('predict') }}" class="{% if request.path == '/predict' %}active{% endif %}">Modelling & Prediction</a>
+    </nav>
+
+    <main class="container">
+        {% block content %}{% endblock %}
+    </main>
+</body>
+</html>
