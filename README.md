@@ -101,5 +101,9 @@ In the web application, these engineered features are calculated automatically f
 
 Create and activate your virtual environment, then run:
 
-```bash
 pip install -r requirements.txt
+
+## Run app.py
+Run python src/app.py and then open the local Flask address shown in the terminal, usually:
+
+http://127.0.0.1:5000/
