@@ -1,0 +1,195 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="card">
+    <h2>Model Selection</h2>
+    <p>Choose a model and enter customer details for a fraud prediction.</p>
+    <p class="recommended-model">
+        <strong>Recommended model:</strong> {{ recommended_model_name }}<br>
+        Reason: It achieved the best F1-score in Task 3 after threshold tuning.
+    </p>
+</section>
+
+<section class="card">
+    <h2>Model Comparison Summary</h2>
+    <p class="table-note">
+        Accuracy alone is not enough here because the fraud class is highly imbalanced. The final model was selected mainly using F1-score, together with ROC-AUC and Average Precision.
+    </p>
+
+    <div class="table-wrapper">
+        <table>
+            <thead>
+                <tr>
+                    <th>Model</th>
+                    <th>Version</th>
+                    <th>Accuracy</th>
+                    <th>Precision</th>
+                    <th>Recall</th>
+                    <th>F1 Score</th>
+                    <th>ROC-AUC</th>
+                    <th>Avg Precision</th>
+                    <th>Threshold</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for row in comparison_rows %}
+                <tr>
+                    <td>{{ row["Model"] }}</td>
+                    <td>{{ row["Version"] }}</td>
+                    <td>{{ "%.4f"|format(row["Accuracy"]) }}</td>
+                    <td>{{ "%.4f"|format(row["Precision"]) }}</td>
+                    <td>{{ "%.4f"|format(row["Recall"]) }}</td>
+                    <td>{{ "%.4f"|format(row["F1_Score"]) }}</td>
+                    <td>{{ "%.4f"|format(row["ROC_AUC"]) }}</td>
+                    <td>{{ "%.4f"|format(row["Average_Precision"]) }}</td>
+                    <td>{{ "%.2f"|format(row["Threshold"]) }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</section>
+
+<section class="card">
+    <h2>Prediction Input Fields</h2>
+    <p class="table-note">
+        Engineered features such as income per family member, contact-info count, and large-family flag are calculated automatically from the entered inputs before prediction.
+    </p>
+
+    <form method="post" class="prediction-form">
+        <div class="form-grid">
+            <div>
+                <label>Model</label>
+                <select name="selected_model">
+                    {% for model_name in model_names %}
+                    <option value="{{ model_name }}" {% if form_data.selected_model == model_name %}selected{% endif %}>{{ model_name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div><label>NO_OF_CHILD</label><input type="number" step="1" name="NO_OF_CHILD" value="{{ form_data['NO_OF_CHILD'] }}"></div>
+            <div><label>FAMILY SIZE</label><input type="number" step="1" name="FAMILY SIZE" value="{{ form_data['FAMILY SIZE'] }}"></div>
+            <div><label>BEGIN_MONTH</label><input type="number" step="1" name="BEGIN_MONTH" value="{{ form_data['BEGIN_MONTH'] }}"></div>
+            <div><label>AGE</label><input type="number" step="1" name="AGE" value="{{ form_data['AGE'] }}"></div>
+            <div><label>YEARS_EMPLOYED</label><input type="number" step="1" name="YEARS_EMPLOYED" value="{{ form_data['YEARS_EMPLOYED'] }}"></div>
+            <div><label>INCOME</label><input type="number" step="any" name="INCOME" value="{{ form_data['INCOME'] }}"></div>
+
+            <div>
+                <label>GENDER</label>
+                <select name="GENDER">
+                    {% for option in category_options["GENDER"] %}
+                    <option value="{{ option }}" {% if form_data['GENDER'] == option %}selected{% endif %}>{{ option }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div>
+                <label>CAR</label>
+                <select name="CAR">
+                    {% for option in category_options["CAR"] %}
+                    <option value="{{ option }}" {% if form_data['CAR'] == option %}selected{% endif %}>{{ option }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div>
+                <label>REALITY</label>
+                <select name="REALITY">
+                    {% for option in category_options["REALITY"] %}
+                    <option value="{{ option }}" {% if form_data['REALITY'] == option %}selected{% endif %}>{{ option }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div>
+                <label>FAMILY_TYPE</label>
+                <select name="FAMILY_TYPE">
+                    {% for option in category_options["FAMILY_TYPE"] %}
+                    <option value="{{ option }}" {% if form_data['FAMILY_TYPE'] == option %}selected{% endif %}>{{ option }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div>
+                <label>HOUSE_TYPE</label>
+                <select name="HOUSE_TYPE">
+                    {% for option in category_options["HOUSE_TYPE"] %}
+                    <option value="{{ option }}" {% if form_data['HOUSE_TYPE'] == option %}selected{% endif %}>{{ option }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div>
+                <label>INCOME_TYPE</label>
+                <select name="INCOME_TYPE">
+                    {% for option in category_options["INCOME_TYPE"] %}
+                    <option value="{{ option }}" {% if form_data['INCOME_TYPE'] == option %}selected{% endif %}>{{ option }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div>
+                <label>EDUCATION_TYPE</label>
+                <select name="EDUCATION_TYPE">
+                    {% for option in category_options["EDUCATION_TYPE"] %}
+                    <option value="{{ option }}" {% if form_data['EDUCATION_TYPE'] == option %}selected{% endif %}>{{ option }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div><label>WORK_PHONE</label><input type="number" step="1" name="WORK_PHONE" value="{{ form_data['WORK_PHONE'] }}"></div>
+            <div><label>PHONE</label><input type="number" step="1" name="PHONE" value="{{ form_data['PHONE'] }}"></div>
+            <div><label>E_MAIL</label><input type="number" step="1" name="E_MAIL" value="{{ form_data['E_MAIL'] }}"></div>
+        </div>
+
+        <div class="button-row">
+            <button type="submit">Predict</button>
+            <a class="clear-btn" href="{{ url_for('predict') }}">Clear</a>
+        </div>
+    </form>
+</section>
+
+<section class="card">
+    <h2>Prediction Result</h2>
+
+    {% if result %}
+        {% if result.error %}
+            <div class="error-box">{{ result.error }}</div>
+        {% else %}
+            <div class="result-box">
+                <p><strong>Model Variant:</strong> {{ result.selected_model }}</p>
+                <p><strong>Predicted Class:</strong> {{ result.predicted_class }}</p>
+                <p><strong>Prediction Label:</strong> {{ result.prediction_label }}</p>
+                <p><strong>Fraud Probability:</strong> {{ result.fraud_probability }}</p>
+                <p><strong>Decision Threshold:</strong> {{ result.threshold }}</p>
+
+                <h3>Interpretation</h3>
+                <ul class="findings-list">
+                    {% for item in result.interpretation %}
+                    <li>{{ item }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        {% endif %}
+    {% else %}
+        <p>No prediction has been made yet.</p>
+    {% endif %}
+</section>
+
+<section class="card">
+    <h2>Saved Modelling Figures</h2>
+    {% if model_figures %}
+    <div class="figure-grid">
+        {% for fig in model_figures %}
+        <div class="figure-card">
+            <img src="{{ url_for('figure_file', filename=fig.filename) }}" alt="{{ fig.title }}">
+            <p><strong>{{ fig.title }}</strong></p>
+            <p>{{ fig.caption }}</p>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <p>No modelling figures were found in the figures folder.</p>
+    {% endif %}
+</section>
+{% endblock %}
