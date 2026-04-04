@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="card">
+    <h2>Dataset Summary</h2>
+    <div class="summary-text">
+        <p><strong>Dataset 1:</strong> {{ file1_name }}</p>
+        <p><strong>Dataset 2:</strong> {{ file2_name }}</p>
+        <br>
+        <p><strong>Merged Rows:</strong> {{ rows }}</p>
+        <p><strong>Merged Columns:</strong> {{ cols }}</p>
+        <p><strong>Fraudulent Transactions (Target=1):</strong> {{ fraud_count }}</p>
+        <p><strong>Non-Fraudulent Transactions (Target=0):</strong> {{ nonfraud_count }}</p>
+        <p><strong>Total Missing Values Before Treatment:</strong> {{ missing_count }}</p>
+    </div>
+</section>
+
+<section class="card">
+    <h2>Preview of Merged Dataset</h2>
+    <div class="table-wrapper">
+        <table>
+            <thead>
+                <tr>
+                    {% for col in preview_columns %}
+                    <th>{{ col }}</th>
+                    {% endfor %}
+                </tr>
+            </thead>
+            <tbody>
+                {% for row in preview_rows %}
+                <tr>
+                    {% for val in row %}
+                    <td>{{ val }}</td>
+                    {% endfor %}
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</section>
+{% endblock %}
