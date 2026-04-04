@@ -1,0 +1,4 @@
+Column,Q1,Q3,IQR,Lower_Bound,Upper_Bound,Outlier_Count_Before_Capping,Outlier_Percentage_Before_Capping
+AGE,33.0,48.0,15.0,10.5,70.5,5,0.02
+YEARS_EMPLOYED,3.0,10.0,7.0,-7.5,20.5,1247,4.961
+INCOME,135000.0,225000.0,90000.0,0.0,360000.0,1180,4.695
