@@ -1,0 +1,9 @@
+Random Forest RandomizedSearchCV Best Parameters
+============================================================
+classifier__n_estimators: 300
+classifier__min_samples_split: 5
+classifier__min_samples_leaf: 1
+classifier__max_depth: 15
+classifier__class_weight: balanced
+
+Best cross-validated F1 score: 0.2131806393262936
