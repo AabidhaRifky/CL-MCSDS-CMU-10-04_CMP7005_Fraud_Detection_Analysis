@@ -98,12 +98,69 @@ In the web application, these engineered features are calculated automatically f
 ---
 
 ## Install dependencies
-
 Create and activate your virtual environment, then run:
 
 pip install -r requirements.txt
 
-## Run app.py
-Run python src/app.py and then open the local Flask address shown in the terminal, usually:
+Run the web application
+From the project root, run:
+python src/app.py
 
+Then open the local Flask address shown in the terminal, usually:
 http://127.0.0.1:5000/
+
+Web application pages
+
+1. Data Overview
+Shows:
+dataset names
+merged row and column counts
+fraud / non-fraud counts
+missing values summary
+preview of the merged dataset
+
+2. EDA
+Shows:
+key EDA findings
+missing-value plot
+class distribution plot
+numerical distributions
+categorical distributions
+fraud-rate-by-category
+AGE and INCOME by TARGET
+correlation heatmap
+
+3. Modelling & Prediction
+Shows:
+model comparison summary
+recommended model
+user input form
+fraud prediction output
+saved modelling figures
+Saved model files
+
+
+The project includes saved deployment files for the GUI:
+final_selected_model_pipeline.pkl
+final_selected_threshold.pkl
+random_forest_balanced_pipeline.pkl
+random_forest_best_threshold.pkl
+random_forest_randomized_search_pipeline.pkl
+random_forest_randomized_search_best_threshold.pkl
+logistic_regression_pipeline.pkl
+logistic_regression_best_threshold.pkl
+
+Important note on reproducibility
+The final notebook is the source of truth for the submitted modelling workflow and results.
+
+The saved model files used by the GUI should be generated from the final notebook so that:
+the notebook results
+the GUI predictions
+the saved model artefacts
+
+all remain consistent.
+
+Author
+Aabidha
+Module: CMP7005
+Project: Credit Card Fraud Detection Analysis
