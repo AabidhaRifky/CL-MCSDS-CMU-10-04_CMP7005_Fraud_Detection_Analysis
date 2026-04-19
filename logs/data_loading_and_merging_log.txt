@@ -1,7 +1,0 @@
-Dataset 1 path: Credit_Card_Dataset_2025_Sept_1.csv
-Dataset 2 path: Credit_Card_Dataset_2025_Sept_2.csv
-Dataset 1 shape: (25134, 17)
-Dataset 2 shape: (25134, 4)
-Raw merged shape: (25134, 21)
-Analytical dataset shape: (25134, 19)
-Merge validation: one_to_one

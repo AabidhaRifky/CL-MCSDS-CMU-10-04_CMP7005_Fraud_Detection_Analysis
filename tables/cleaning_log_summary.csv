@@ -1,9 +1,0 @@
-Step,Status,Comment
-Datasets loaded,Done,Credit_Card_Dataset_2025_Sept_1.csv and Credit_Card_Dataset_2025_Sept_2.csv loaded successfully.
-Merge validation,Done,Merge validated as one-to-one on ID and User.
-Redundant columns removed,Done,User and Unnamed: 0 removed from the analytical dataset where present.
-Duplicate full rows checked,Done,Duplicate full rows found: 0.
-Duplicate ID values checked,Done,Duplicate ID values found: 0.
-Missing values checked,Done,Total missing values currently detected in the analytical dataset: 22.
-Planned preprocessing approach,Done,"Median imputation for numeric fields, mode imputation for categorical fields, and selective EDA outlier handling."
-Planned feature engineering,Done,Household burden and contactability features are added later in Task 2B.

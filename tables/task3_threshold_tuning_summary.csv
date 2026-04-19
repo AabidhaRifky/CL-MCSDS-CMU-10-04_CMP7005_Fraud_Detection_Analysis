@@ -1,4 +1,0 @@
-Model,Best_Validation_Threshold,Best_Validation_F1
-Logistic Regression,0.76,0.08064516129032258
-Random Forest,0.12,0.34444444444444444
-Random Forest (RandomizedSearchCV),0.43,0.29333333333333333
