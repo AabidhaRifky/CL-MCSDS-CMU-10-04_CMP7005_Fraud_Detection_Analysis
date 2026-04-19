@@ -1,11 +1,11 @@
-2026-04-19 19:32:43,945 - INFO - Pipeline execution started.
-2026-04-19 19:32:44,424 - INFO - Missing values table saved to tables/
-2026-04-19 19:33:05,560 - INFO - Logistic Regression model saved to models/logistic_regression_model.pkl
-2026-04-19 19:33:06,338 - INFO - Decision Tree model saved to models/decision_tree_model.pkl
-2026-04-19 19:33:10,600 - INFO - Random Forest model saved to models/random_forest_model.pkl
-2026-04-19 19:33:19,399 - INFO - Gradient Boosting model saved to models/gradient_boosting_model.pkl
-2026-04-19 19:33:19,576 - INFO - Model comparison saved to tables/model_comparison.csv
-2026-04-19 19:34:08,015 - INFO - Final model saved to final_models/final_fraud_model.pkl
-2026-04-19 19:34:08,570 - INFO - Final evaluation report saved to reports/final_model_report.txt
-2026-04-19 19:34:43,330 - INFO - Feature importance table saved to tables/
-2026-04-19 19:34:45,082 - INFO - Detailed reports saved to reports/
+2026-04-19 21:57:34,246 - INFO - Pipeline execution started.
+2026-04-19 21:57:34,481 - INFO - Missing values table saved to tables/
+2026-04-19 21:57:46,281 - INFO - Logistic Regression model saved to models/logistic_regression_model.pkl
+2026-04-19 21:57:46,543 - INFO - Decision Tree model saved to models/decision_tree_model.pkl
+2026-04-19 21:57:48,307 - INFO - Random Forest model saved to models/random_forest_model.pkl
+2026-04-19 21:57:51,668 - INFO - Gradient Boosting model saved to models/gradient_boosting_model.pkl
+2026-04-19 21:57:51,734 - INFO - Model comparison saved to tables/model_comparison.csv
+2026-04-19 21:58:22,227 - INFO - Final model saved to final_models/final_fraud_model.pkl
+2026-04-19 21:58:22,532 - INFO - Final evaluation report saved to reports/final_model_report.txt
+2026-04-19 21:58:42,009 - INFO - Feature importance table saved to tables/
+2026-04-19 21:58:43,034 - INFO - Detailed reports saved to reports/

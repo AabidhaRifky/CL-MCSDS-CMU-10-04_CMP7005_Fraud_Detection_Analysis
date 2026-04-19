@@ -2,24 +2,25 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Credit Card Fraud Detection System</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <title>Fraud Detection System</title>
+    <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body>
-    <header class="page-header">
-        <h1>Credit Card Fraud Detection System</h1>
-        <p>Programming for Data Analysis - CMP7005</p>
-    </header>
 
-    <nav class="nav-bar">
-        <a href="{{ url_for('index') }}" class="{% if request.path == '/' %}active{% endif %}">Data Overview</a>
-        <a href="{{ url_for('eda') }}" class="{% if request.path == '/eda' %}active{% endif %}">EDA</a>
-        <a href="{{ url_for('predict') }}" class="{% if request.path == '/predict' %}active{% endif %}">Modelling & Prediction</a>
-    </nav>
+<body class="bg-gray-100 text-gray-800">
 
-    <main class="container">
-        {% block content %}{% endblock %}
-    </main>
+<!-- NAVBAR -->
+<nav class="bg-white shadow-md p-4 flex justify-between">
+    <h1 class="font-semibold text-lg">Fraud Detection</h1>
+    <div class="space-x-6">
+        <a href="/" class="hover:text-blue-500">Home</a>
+        <a href="/predict" class="hover:text-blue-500">Predict</a>
+        <a href="/eda" class="hover:text-blue-500">EDA</a>
+    </div>
+</nav>
+
+<div class="p-6">
+    {% block content %}{% endblock %}
+</div>
+
 </body>
 </html>

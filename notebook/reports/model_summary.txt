@@ -1,5 +1,6 @@
                  Model  Accuracy  Precision    Recall  F1 Score   ROC-AUC
-2        Random Forest  0.982892   0.470588  0.190476  0.271186  0.733831
+0        Random Forest  0.982892   0.470588  0.190476  0.271186  0.733831
 1        Decision Tree  0.970360   0.171717  0.202381  0.185792  0.592795
-3    Gradient Boosting  0.984285   1.000000  0.059524  0.112360  0.710728
-0  Logistic Regression  0.639546   0.027352  0.595238  0.052301  0.666820
+2    Gradient Boosting  0.984484   1.000000  0.071429  0.133333  0.712424
+3  Logistic Regression  0.639546   0.027352  0.595238  0.052301  0.666820
+0    Final Tuned Model  0.981898   0.428571  0.250000  0.315789  0.786125

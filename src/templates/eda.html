@@ -1,37 +1,18 @@
 {% extends "base.html" %}
-
 {% block content %}
-<section class="card">
-    <h2>EDA Summary</h2>
-    <p><strong>Numerical Columns:</strong> {{ numeric_count }}</p>
-    <p><strong>Categorical Columns:</strong> {{ categorical_count }}</p>
-    <p><strong>Main Target Column:</strong> TARGET</p>
-    <p><strong>Note:</strong> Outlier capping was applied only for EDA on continuous variables. The modelling stage used pipeline-based preprocessing to avoid data leakage.</p>
-</section>
 
-<section class="card">
-    <h2>Key EDA Findings</h2>
-    <ul class="findings-list">
-        {% for item in findings %}
-        <li>{{ item }}</li>
-        {% endfor %}
-    </ul>
-</section>
+<h2 class="text-2xl font-semibold mb-4">EDA Visualisations</h2>
 
-<section class="card">
-    <h2>EDA Visualisations</h2>
-    {% if eda_figures %}
-    <div class="figure-grid">
-        {% for fig in eda_figures %}
-        <div class="figure-card">
-            <h3>{{ fig.title }}</h3>
-            <img src="{{ url_for('figure_file', filename=fig.filename) }}" alt="{{ fig.title }}">
-            <p>{{ fig.caption }}</p>
-        </div>
-        {% endfor %}
+<div class="grid grid-cols-3 gap-4">
+    {% for img in images %}
+    <div class="bg-white p-2 rounded-xl shadow">
+        <img 
+            src="{{ url_for('static', filename='figures/' + img) }}" 
+            class="w-full rounded-lg"
+        >
+        <p class="text-xs mt-2 text-center text-gray-500">{{ img }}</p>
     </div>
-    {% else %}
-    <p>No EDA figures were found in the figures folder.</p>
-    {% endif %}
-</section>
+    {% endfor %}
+</div>
+
 {% endblock %}
