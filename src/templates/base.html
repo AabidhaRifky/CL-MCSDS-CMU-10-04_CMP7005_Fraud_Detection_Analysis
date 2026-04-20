@@ -2,25 +2,102 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Fraud Detection System</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enterprise Fraud Analytics | CMP7005</title>
+    <!-- CSS Dependencies -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
+<body>
+    <div class="app-container">
+        <!-- SIDEBAR -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <div class="logo-container">
+                    <div class="logo-icon">
+                        <i class="fas fa-shield-halved"></i>
+                    </div>
+                    <span class="logo-text">CMP 7005</span>
+                </div>
 
-<body class="bg-gray-100 text-gray-800">
+                <div class="student-card">
+                    <div class="name">Aabidha Rifky</div>
+                    <div class="id">st20357374 | CMP 7005</div>
+                </div>
+            </div>
 
-<!-- NAVBAR -->
-<nav class="bg-white shadow-md p-4 flex justify-between">
-    <h1 class="font-semibold text-lg">Fraud Detection</h1>
-    <div class="space-x-6">
-        <a href="/" class="hover:text-blue-500">Home</a>
-        <a href="/predict" class="hover:text-blue-500">Predict</a>
-        <a href="/eda" class="hover:text-blue-500">EDA</a>
+            <nav class="sidebar-nav">
+                <div class="nav-group">
+                    <div class="nav-label">Core Platform</div>
+                    <a href="/" class="nav-link {% if request.endpoint == 'home' %}active{% endif %}">
+                        <i class="fas fa-layer-group"></i>
+                        <span>Dashboard Home</span>
+                    </a>
+                    <a href="/overview" class="nav-link {% if request.endpoint == 'overview' %}active{% endif %}">
+                        <i class="fas fa-table-list"></i>
+                        <span>Data Inventory</span>
+                    </a>
+                    <a href="/eda" class="nav-link {% if request.endpoint == 'eda' %}active{% endif %}">
+                        <i class="fas fa-chart-pie"></i>
+                        <span>EDA Visuals</span>
+                    </a>
+                </div>
+
+                <div class="nav-group">
+                    <div class="nav-label">Machine Learning</div>
+                    <a href="/predict" class="nav-link {% if request.endpoint == 'predict' %}active{% endif %}">
+                        <i class="fas fa-microchip"></i>
+                        <span>Modelling & Prediction</span>
+                    </a>
+                </div>
+            </nav>
+
+            <div class="sidebar-footer">
+                <div style="color: var(--text-muted); font-size: 10px; font-weight: 600;">
+                    Programming for Data Analysis
+                </div>
+            </div>
+        </aside>
+
+        <!-- MAIN WRAPPER -->
+        <div class="main-wrapper">
+            <header class="top-bar">
+                <div class="breadcrumb">
+                    <span>Platform</span>
+                    <i class="fas fa-chevron-right" style="font-size: 10px; opacity: 0.5;"></i>
+                    <span class="active">{% block page_title %}Overview{% endblock %}</span>
+                </div>
+                
+                <div class="user-meta" style="display: flex; align-items: center; gap: 15px;">
+                    <div style="text-align: right;">
+                        <div style="font-size: 12px; font-weight: 700;">Task 4 Implementation</div>
+                        <div style="font-size: 11px; color: var(--text-muted);">Development Build</div>
+                    </div>
+                    <div style="width: 36px; height: 36px; background: #eee; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 12px; color: var(--primary);">
+                        AR
+                    </div>
+                </div>
+            </header>
+
+            <main class="main-scroll">
+                {% block content %}{% endblock %}
+            </main>
+        </div>
     </div>
-</nav>
 
-<div class="p-6">
-    {% block content %}{% endblock %}
-</div>
-
+    <!-- Script for active states -->
+    <script>
+        // Ensure accurate active state highlighting
+        document.addEventListener('DOMContentLoaded', () => {
+            const currentPath = window.location.pathname;
+            document.querySelectorAll('.nav-link').forEach(link => {
+                if(link.getAttribute('href') === currentPath) {
+                    link.classList.add('active');
+                } else {
+                    link.classList.remove('active');
+                }
+            });
+        });
+    </script>
 </body>
 </html>

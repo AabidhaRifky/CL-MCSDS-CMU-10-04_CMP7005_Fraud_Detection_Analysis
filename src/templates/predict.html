@@ -1,116 +1,194 @@
 {% extends "base.html" %}
+
+{% block page_title %}Modelling & Prediction{% endblock %}
+
 {% block content %}
-
-<div class="max-w-5xl mx-auto">
-
-<h2 class="text-2xl font-semibold mb-4">Fraud Prediction</h2>
-
-<form method="POST" class="bg-white p-6 rounded-2xl shadow-md">
-
-<!-- MODEL -->
-<select name="model" class="input">
-{% for m in models %}
-<option value="{{ m }}" {% if m == selected_model %}selected{% endif %}>
-{{ m }}
-</option>
-{% endfor %}
-</select>
-
-<input name="age" type="number" placeholder="Age" class="input" value="{{ request.form.age }}">
-<input name="income" type="number" placeholder="Income" class="input" value="{{ request.form.income }}">
-<input name="years_employed" type="number" placeholder="Years Employed" class="input" value="{{ request.form.years_employed }}">
-<input name="family_size" type="number" placeholder="Family Size" class="input" value="{{ request.form.family_size }}">
-<input name="children" type="number" placeholder="Children" class="input" value="{{ request.form.children }}">
-<input name="begin_month" type="number" placeholder="Begin Month" class="input" value="{{ request.form.begin_month }}">
-
-<select name="gender" class="input">
-<option {% if request.form.gender == 'M' %}selected{% endif %}>M</option>
-<option {% if request.form.gender == 'F' %}selected{% endif %}>F</option>
-</select>
-
-<select name="family_type" class="input">
-<option>Married</option>
-<option>Single / not married</option>
-</select>
-
-<select name="house_type" class="input">
-<option>House / apartment</option>
-<option>With parents</option>
-</select>
-
-<select name="income_type" class="input">
-<option>Working</option>
-<option>Commercial associate</option>
-</select>
-
-<select name="education_type" class="input">
-<option>Secondary / secondary special</option>
-<option>Higher education</option>
-</select>
-
-<select name="car" class="input">
-<option {% if request.form.car == 'Y' %}selected{% endif %}>Y</option>
-<option {% if request.form.car == 'N' %}selected{% endif %}>N</option>
-</select>
-
-<select name="reality" class="input">
-<option {% if request.form.reality == 'Y' %}selected{% endif %}>Y</option>
-<option {% if request.form.reality == 'N' %}selected{% endif %}>N</option>
-</select>
-
-<select name="work_phone" class="input">
-<option>0</option><option>1</option>
-</select>
-
-<select name="phone" class="input">
-<option>0</option><option>1</option>
-</select>
-
-<button type="submit" class="bg-blue-500 text-white px-6 py-3 mt-4 rounded-xl">
-    Predict
-</button>
-
-</form>
-
-{% if prediction %}
-<div class="mt-6 bg-white p-6 rounded-xl shadow">
-
-<h3 class="text-xl font-bold">Result</h3>
-
-<p><strong>{{ prediction }}</strong></p>
-<p>Probability: {{ probability }}</p>
-<p>Risk: {{ risk }}</p>
-
-<p>{{ explanation }}</p>
-
-<p class="mt-2 text-sm text-gray-500">
-Model used: {{ selected_model }}
-</p>
-
-{% if metrics %}
-<p>Precision: {{ metrics['Precision'] }}</p>
-<p>Recall: {{ metrics['Recall'] }}</p>
-<p>F1 Score: {{ metrics['F1 Score'] }}</p>
-<p>ROC-AUC: {{ metrics['ROC-AUC'] }}</p>
-{% endif %}
-
+<div class="welcome-section" style="margin-bottom: 50px;">
+    <h1 style="font-size: 32px; font-weight: 800; margin-bottom: 12px; letter-spacing: -0.5px;">Modelling & Prediction</h1>
+    <p style="color: var(--text-muted); font-size: 16px; max-width: 800px;">
+        Perform live inference by entering customer transaction details. Select a specific model from the dropdown to compare predictive performance.
+    </p>
 </div>
-{% endif %}
 
 {% if error %}
-<p class="text-red-500">{{ error }}</p>
+<div style="padding: 18px; background: rgba(255,118,117,0.08); border-radius: 14px; border-left: 4px solid var(--danger); color: var(--danger); margin-bottom: 32px; font-size: 14px; font-weight: 500;">
+    <i class="fas fa-triangle-exclamation" style="margin-right: 8px;"></i> System Error: {{ error }}
+</div>
 {% endif %}
 
+<div style="display: grid; grid-template-columns: 1fr 340px; gap: 40px; align-items: start;">
+    
+    <!-- LEFT: INPUT FORM -->
+    <div class="content-box">
+        <div class="content-header">
+            <h2><i class="fas fa-sliders text-primary"></i> Analytical Parameters</h2>
+            <div style="font-size: 12px; color: var(--text-muted); font-weight: 500;">Model Inference Inputs</div>
+        </div>
+        <div class="content-body">
+            <form action="/predict" method="POST">
+                
+                <div style="margin-bottom: 35px;">
+                    <label class="field-label" style="display: block; margin-bottom: 10px;">Select Predictive Model</label>
+                    <div class="input-container" style="max-width: 100%;">
+                        <i class="fas fa-brain"></i>
+                        <select name="model" class="form-input" onchange="this.form.submit()" style="padding-left: 45px; background-color: var(--primary-light); border-color: var(--primary);">
+                            {% for name, config in models.items() %}
+                            <option value="{{ name }}" {% if selected_model == name %}selected{% endif %}>
+                                {{ name }} ({{ config.type }})
+                            </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-grid">
+                    <div class="field-group">
+                        <label class="field-label">Gender</label>
+                        <div class="input-container">
+                            <i class="fas fa-user"></i>
+                            <select name="gender" class="form-input">
+                                <option value="M">Male</option>
+                                <option value="F">Female</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="field-group">
+                        <label class="field-label">Age</label>
+                        <div class="input-container">
+                            <i class="fas fa-calendar-day"></i>
+                            <input type="number" name="age" class="form-input" value="35" required>
+                        </div>
+                    </div>
+
+                    <div class="field-group">
+                        <label class="field-label">Annual Income (USD)</label>
+                        <div class="input-container">
+                            <i class="fas fa-dollar-sign"></i>
+                            <input type="number" name="income" class="form-input" value="45000" required>
+                        </div>
+                    </div>
+
+                    <div class="field-group">
+                        <label class="field-label">Income Type</label>
+                        <div class="input-container">
+                            <i class="fas fa-briefcase"></i>
+                            <select name="income_type" class="form-input">
+                                <option value="Working">Working</option>
+                                <option value="Commercial associate">Commercial Associate</option>
+                                <option value="Pensioner">Pensioner</option>
+                                <option value="State servant">State Servant</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="field-group">
+                        <label class="field-label">Years Employed</label>
+                        <div class="input-container">
+                            <i class="fas fa-clock-rotate-left"></i>
+                            <input type="number" step="0.1" name="years_employed" class="form-input" value="5.5" required>
+                        </div>
+                    </div>
+
+                    <div class="field-group">
+                        <label class="field-label">Account Age (Months)</label>
+                        <div class="input-container">
+                            <i class="fas fa-history"></i>
+                            <input type="number" name="begin_month" class="form-input" value="-12" required>
+                        </div>
+                    </div>
+
+                    <div class="field-group">
+                        <label class="field-label">Family Size</label>
+                        <div class="input-container">
+                            <i class="fas fa-users"></i>
+                            <input type="number" name="family_size" class="form-input" value="2" required>
+                        </div>
+                    </div>
+
+                    <div class="field-group">
+                        <label class="field-label">Residential Status</label>
+                        <div class="input-container">
+                            <i class="fas fa-house"></i>
+                            <select name="house_type" class="form-input">
+                                <option value="House / apartment">House / Apartment</option>
+                                <option value="With parents">With Parents</option>
+                                <option value="Municipal apartment">Municipal Apartment</option>
+                                <option value="Rented apartment">Rented Apartment</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn-submit" style="margin-top: 15px;">
+                        <i class="fas fa-bolt"></i> RUN ANALYSIS
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- RIGHT: PIPELINE METRICS -->
+    <div class="content-box" style="margin-bottom: 0;">
+        <div class="content-header">
+            <h2><i class="fas fa-chart-line text-primary"></i> Metrics</h2>
+        </div>
+        <div class="content-body" style="padding: 30px;">
+            {% if metrics %}
+                <div style="display: grid; grid-template-columns: 1fr; gap: 18px;">
+                    {% for k, v in metrics.items() %}
+                    <div style="display: flex; justify-content: space-between; align-items: center; padding-bottom: 10px; border-bottom: 1px solid var(--border-color);">
+                        <span style="font-size: 13px; color: var(--text-muted); font-weight: 600;">{{ k }}</span>
+                        <span style="font-size: 14px; font-weight: 700; color: var(--text-main);">{{ v }}</span>
+                    </div>
+                    {% endfor %}
+                </div>
+                <div style="margin-top: 25px; padding: 15px; background: var(--primary-light); border-radius: 10px; font-size: 12px; color: var(--primary); font-weight: 500;">
+                    <i class="fas fa-info-circle"></i> These metrics represent validation performance for the selected model variant.
+                </div>
+            {% else %}
+                <div style="text-align: center; padding: 20px 0;">
+                    <i class="fas fa-chart-bar" style="font-size: 32px; color: #e2e8f0; margin-bottom: 15px; display: block;"></i>
+                    <p style="font-size: 13px; color: var(--text-muted); line-height: 1.5;">Execute a prediction to load baseline performance metrics.</p>
+                </div>
+            {% endif %}
+        </div>
+    </div>
 </div>
 
-<style>
-.input {
-width:100%;
-padding:10px;
-margin-bottom:10px;
-border-radius:10px;
-border:1px solid #ddd;
-}
-</style>
+<!-- PREDICTION RESULTS -->
+{% if prediction %}
+<div class="prediction-result" style="margin-top: 50px;">
+    <div class="result-banner banner-{{ risk_color }}">
+        <div class="banner-icon">
+            {% if risk_color == 'success' %}<i class="fas fa-check-circle text-success"></i>
+            {% elif risk_color == 'warning' %}<i class="fas fa-triangle-exclamation text-warning"></i>
+            {% else %}<i class="fas fa-user-xmark text-danger"></i>{% endif %}
+        </div>
+        <div class="banner-info">
+            <h3 style="font-size: 14px; font-weight: 700;">DECISION STATUS</h3>
+            <div class="decision" style="font-size: 36px; font-weight: 900; letter-spacing: -1px;">{{ prediction }}</div>
+        </div>
+    </div>
 
+    <div class="result-details" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px;">
+        <div class="detail-tile">
+            <div class="label">Fraud Probability</div>
+            <div class="value" style="font-size: 24px; font-weight: 800;">{{ probability }}%</div>
+            <div style="height: 6px; width: 100%; background: #e2e8f0; border-radius: 3px; margin-top: 12px;">
+                <div style="height: 100%; width: {{ probability }}%; background: var(--{{ risk_color }}); border-radius: 3px;"></div>
+            </div>
+        </div>
+        <div class="detail-tile">
+            <div class="label">Assessed Risk Level</div>
+            <div class="value text-{{ risk_color }}" style="font-size: 24px; font-weight: 800;">{{ risk }}</div>
+        </div>
+        <div class="detail-tile">
+            <div class="label">System Recommendation</div>
+            <div class="value" style="font-size: 14px; line-height: 1.6; font-weight: 600; color: var(--text-main);">
+                {{ explanation }}
+            </div>
+        </div>
+    </div>
+</div>
+{% endif %}
 {% endblock %}

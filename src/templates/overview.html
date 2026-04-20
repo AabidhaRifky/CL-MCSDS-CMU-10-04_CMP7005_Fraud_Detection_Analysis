@@ -1,0 +1,92 @@
+{% extends "base.html" %}
+
+{% block page_title %}Data Inventory{% endblock %}
+
+{% block content %}
+<div class="welcome-section" style="margin-bottom: 40px;">
+    <h1 style="font-size: 28px; font-weight: 800; margin-bottom: 10px;">Primary Dataset Inventory</h1>
+    <p style="color: var(--text-muted); font-size: 15px;">
+        Comprehensive breakdown of the analytical dataset formed by merging '2025_Sept_1' and '2025_Sept_2' via Primary Key: <strong>{{ dataset.primary_key }}</strong>.
+    </p>
+</div>
+
+<div class="dashboard-grid">
+    <div class="metric-card">
+        <div class="metric-label">Observations</div>
+        <div class="metric-value">{{ "{:,}".format(dataset.total_rows) }}</div>
+        <p style="font-size: 11px; color: var(--success); font-weight: 600; margin-top: 5px;">+ Full Compliance</p>
+    </div>
+    <div class="metric-card">
+        <div class="metric-label">Analytical Features</div>
+        <div class="metric-value">{{ dataset.total_columns }}</div>
+        <div style="display: flex; gap: 8px; margin-top: 5px;">
+            <span style="font-size: 10px; padding: 2px 6px; background: #eee; border-radius: 4px;">{{ dataset.numerical_features }} Numerical</span>
+            <span style="font-size: 10px; padding: 2px 6px; background: #eee; border-radius: 4px;">{{ dataset.categorical_features }} Categorical</span>
+        </div>
+    </div>
+    <div class="metric-card">
+        <div class="metric-label">Fraudulent Class (Target)</div>
+        <div class="metric-value text-danger">{{ dataset.fraud_count }}</div>
+        <p style="font-size: 11px; color: var(--text-muted); margin-top: 5px;">{{ dataset.fraud_percentage }}% incidence rate</p>
+    </div>
+    <div class="metric-card">
+        <div class="metric-label">Authorized Trans.</div>
+        <div class="metric-value">{{ "{:,}".format(dataset.non_fraud_count) }}</div>
+        <p style="font-size: 11px; color: var(--success); margin-top: 5px;">98.33% Majority Class</p>
+    </div>
+</div>
+
+<div class="content-box">
+    <div class="content-header">
+        <h2><i class="fas fa-list-check text-primary"></i> Data Dictionary & Schema</h2>
+    </div>
+    <div class="content-body" style="padding: 0;">
+        <table style="width: 100%; border-collapse: collapse; font-size: 14px;">
+            <thead>
+                <tr style="background: #f8f9fa; border-bottom: 1px solid var(--border-color); text-align: left;">
+                    <th style="padding: 16px 32px; font-weight: 700;">Feature ID</th>
+                    <th style="padding: 16px 32px; font-weight: 700;">Description</th>
+                    <th style="padding: 16px 32px; font-weight: 700;">Type</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for feature in dataset.features %}
+                <tr style="border-bottom: 1px solid var(--border-color);">
+                    <td style="padding: 12px 32px; font-weight: 600; color: var(--primary);">{{ feature }}</td>
+                    <td style="padding: 12px 32px; color: var(--text-muted);">
+                        {% if feature == 'TARGET' %}Primary logical target (1: Fraud, 0: Safe){% else %}Analytical variable used for inference modeling.{% endif %}
+                    </td>
+                    <td style="padding: 12px 32px;">
+                        <span style="font-size: 11px; background: var(--primary-light); color: var(--primary); padding: 4px 10px; border-radius: 20px; font-weight: 600;">
+                            {% if feature in ['INCOME', 'AGE', 'YEARS_EMPLOYED', 'FAMILY_SIZE', 'BEGIN_MONTH'] %}Continuous{% else %}Nominal{% endif %}
+                        </span>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div class="content-box">
+    <div class="content-header">
+        <h2><i class="fas fa-screwdriver-wrench text-primary"></i> Data Preprocessing Logs (Task 2b)</h2>
+    </div>
+    <div class="content-body">
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px;">
+            <div style="padding: 20px; border: 1px solid var(--border-color); border-radius: 12px;">
+                <h4 style="font-size: 13px; font-weight: 700; margin-bottom: 10px;">Missing Values</h4>
+                <p style="font-size: 13px; color: var(--text-muted);">Handled via Mode/Median imputation strategies specified in notebook pipeline.</p>
+            </div>
+            <div style="padding: 20px; border: 1px solid var(--border-color); border-radius: 12px;">
+                <h4 style="font-size: 13px; font-weight: 700; margin-bottom: 10px;">Duplicate Filter</h4>
+                <p style="font-size: 13px; color: var(--text-muted);">De-duplicated based on ID and transaction history profile.</p>
+            </div>
+            <div style="padding: 20px; border: 1px solid var(--border-color); border-radius: 12px;">
+                <h4 style="font-size: 13px; font-weight: 700; margin-bottom: 10px;">Feature Engine</h4>
+                <p style="font-size: 13px; color: var(--text-muted);">Engineered 'Income per person' to capture household financial health.</p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
